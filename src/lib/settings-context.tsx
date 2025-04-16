@@ -65,12 +65,12 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       // Save to localStorage
       if (typeof window !== 'undefined') {
         localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(updated));
-      }
-      
-      // Apply theme changes
-      if (newSettings.darkMode !== undefined) {
-        document.documentElement.classList.toggle('dark', updated.darkMode);
-        document.documentElement.classList.toggle('light', !updated.darkMode);
+        
+        // Apply theme changes - only in browser context
+        if (newSettings.darkMode !== undefined) {
+          document.documentElement.classList.toggle('dark', updated.darkMode);
+          document.documentElement.classList.toggle('light', !updated.darkMode);
+        }
       }
       
       return updated;
@@ -82,9 +82,9 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     setSettings(defaultSettings);
     if (typeof window !== 'undefined') {
       localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(defaultSettings));
+      document.documentElement.classList.toggle('dark', defaultSettings.darkMode);
+      document.documentElement.classList.toggle('light', !defaultSettings.darkMode);
     }
-    document.documentElement.classList.toggle('dark', defaultSettings.darkMode);
-    document.documentElement.classList.toggle('light', !defaultSettings.darkMode);
   };
 
   // Apply theme on mount and settings change
