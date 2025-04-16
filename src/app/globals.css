@@ -98,7 +98,8 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground min-h-screen font-sans antialiased;
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
@@ -107,13 +108,38 @@ html {
 }
 
 html.dark body {
-  background-color: black;
-  color: white;
+  @apply bg-black text-white;
 }
 
 html.light body {
-  background-color: #f5f5f5;
-  color: #0f0f0f;
+  @apply bg-zinc-100 text-zinc-900;
+}
+
+.bg-music-gradient {
+  @apply bg-gradient-to-br from-purple-500/80 to-background transition-all duration-300;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  @apply w-1.5 h-1.5;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-zinc-400/20 rounded-full hover:bg-zinc-400/30;
+}
+
+/* Custom selection color */
+::selection {
+  @apply bg-purple-500/30 text-foreground;
+}
+
+/* Custom text highlight */
+.text-highlight {
+  @apply bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent;
 }
 
 /* Background for dark mode */
@@ -153,44 +179,6 @@ html.light .from-purple-500 {
 
 html.light .to-pink-500 {
   --tw-gradient-to: #ec4899;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
-}
-
-html.light ::-webkit-scrollbar-thumb {
-  background: rgba(15, 15, 15, 0.2);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-html.light ::-webkit-scrollbar-thumb:hover {
-  background: rgba(15, 15, 15, 0.3);
-}
-
-/* Custom selection color */
-::selection {
-  background: rgba(139, 92, 246, 0.3);
-  color: white;
-}
-
-/* Custom text highlight */
-.text-highlight {
-  @apply bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent;
 }
 
 /* Additional light mode overrides */
