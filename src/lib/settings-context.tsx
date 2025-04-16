@@ -9,6 +9,13 @@ import {
 } from 'react';
 import { useAuth } from './auth-context';
 
+// Utility function to safely handle DOM manipulations
+const safelyManipulateDOM = (callback: () => void) => {
+  if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+    callback();
+  }
+};
+
 // Settings interface
 export interface AppSettings {
   darkMode: boolean;
@@ -62,8 +69,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     setSettings(prev => {
       const updated = { ...prev, ...newSettings };
       
-      // Save to localStorage
-      if (typeof window !== 'undefined') {
+      // Save to localStorage and apply theme
+      safelyManipulateDOM(() => {
         localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(updated));
         
         // Apply theme changes - only in browser context
@@ -71,7 +78,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
           document.documentElement.classList.toggle('dark', updated.darkMode);
           document.documentElement.classList.toggle('light', !updated.darkMode);
         }
-      }
+      });
       
       return updated;
     });
@@ -80,19 +87,19 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   // Reset settings to defaults
   const resetSettings = () => {
     setSettings(defaultSettings);
-    if (typeof window !== 'undefined') {
+    safelyManipulateDOM(() => {
       localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(defaultSettings));
       document.documentElement.classList.toggle('dark', defaultSettings.darkMode);
       document.documentElement.classList.toggle('light', !defaultSettings.darkMode);
-    }
+    });
   };
 
   // Apply theme on mount and settings change
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    safelyManipulateDOM(() => {
       document.documentElement.classList.toggle('dark', settings.darkMode);
       document.documentElement.classList.toggle('light', !settings.darkMode);
-    }
+    });
   }, [settings.darkMode]);
 
   return (
