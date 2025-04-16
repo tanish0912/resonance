@@ -2,11 +2,21 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import AppLayout from "@/components/AppLayout";
-import HomeContent from "@/components/HomeContent";
+import dynamic from 'next/dynamic';
 import LoadingAnimation from "@/components/LoadingAnimation";
 import { useAuth } from "@/lib/auth-context";
 import { Suspense } from "react";
+
+// Dynamically import components that use browser APIs
+const AppLayout = dynamic(() => import("@/components/AppLayout"), {
+  ssr: false,
+  loading: () => <LoadingAnimation />
+});
+
+const HomeContent = dynamic(() => import("@/components/HomeContent"), {
+  ssr: false,
+  loading: () => <LoadingAnimation />
+});
 
 export default function DashboardPage() {
   const { user, isLoading } = useAuth();
