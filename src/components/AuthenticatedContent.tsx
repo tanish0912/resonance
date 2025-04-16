@@ -1,23 +1,13 @@
 "use client";
 
-import { useEffect, ReactNode } from "react";
+import { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import LoadingAnimation from "./LoadingAnimation";
 
-interface AuthenticatedContentProps {
-  children: ReactNode;
-}
-
-export default function AuthenticatedContent({ children }: AuthenticatedContentProps) {
+export default function AuthenticatedContent({ children }: { children: ReactNode }) {
   const { user, isLoading } = useAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/');
-    }
-  }, [user, isLoading, router]);
 
   if (isLoading) {
     return (
@@ -28,6 +18,7 @@ export default function AuthenticatedContent({ children }: AuthenticatedContentP
   }
 
   if (!user) {
+    router.push('/');
     return null;
   }
 
